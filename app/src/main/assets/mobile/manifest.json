@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "YellowSpot mobile viewport",
+  "version": "1.0",
+  "description": "Subtle layout rules for Spotify on narrow screens.",
+  "browser_specific_settings": {
+    "gecko": { "id": "yellowspot-mobile@holiday.local" }
+  },
+  "content_scripts": [{
+    "matches": ["https://open.spotify.com/*"],
+    "css": ["mobile.css"],
+    "run_at": "document_start"
+  }]
+}

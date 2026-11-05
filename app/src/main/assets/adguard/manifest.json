@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "YellowSpot Spotify ad guard",
+  "version": "1.1.0",
+  "description": "Keeps Spotify web playback flowing during ad breaks (mute/fast-forward/skip/recover, no network blocking) and applies AMOLED + anti-nag cosmetic comfort rules.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "yellowspot-adguard@holiday.local"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://open.spotify.com/*"
+      ],
+      "js": [
+        "adguard.js",
+        "uiclean.js"
+      ],
+      "css": [
+        "adguard.css"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

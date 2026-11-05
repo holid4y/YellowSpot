@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.holiday.yellowspot'
+    compileSdk {
+        // GeckoView 157 AAR metadata requires compileSdk 37.1 (minCompileMinorSdk=1).
+        version = release(37) {
+            minorApiLevel = 1
+        }
+    }
+    buildToolsVersion '37.0.0'
+
+    defaultConfig {
+        applicationId 'com.holiday.yellowspot'
+        minSdk 26
+        targetSdk 35
+        versionCode 3
+        versionName '0.3.0'
+        ndk {
+            // Most current Android phones are ARM64. Keeps the APK smaller.
+            abiFilters 'arm64-v8a'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // Full Gecko browser engine: signed Firefox WebExtensions work here.
+    implementation 'org.mozilla.geckoview:geckoview-arm64-v8a:157.0.20261005135250'
+}

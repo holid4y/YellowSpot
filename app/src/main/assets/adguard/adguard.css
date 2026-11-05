@@ -1,0 +1,60 @@
+/*
+ * YellowSpot ad guard — cosmetic layer.
+ * Display-only rules: hiding (never removing) keeps React's DOM
+ * reconciliation stable, and the player bar itself is never hidden.
+ * Audio ad handling lives in adguard.js.
+ *
+ * Sections:
+ *  1. Ad banner containers.
+ *  2. Community-inspired AMOLED pure-black theme (v0.3.0) — the single
+ *     most requested community feature for OLED phones like the POCO
+ *     X7 Pro: true #000000 surfaces save battery and look sleek. Idea
+ *     adopted from the Spotifuck/SpotiwebJS/SpotiVibe theme lineage; it
+ *     works by overriding Spotify's own background CSS variables, so it
+ *     survives DOM redesigns far better than element-class rules.
+ *  3. Premium upsell links ("Explore Premium" etc.) — hidden by href,
+ *     which is locale-independent (Button-Remover / SpotiVibe idea).
+ */
+
+/* 1. Persistent ad banner containers. */
+[data-testid="ad-slot-container"],
+[data-testid="ad-slot"],
+.Root__ads-container {
+  display: none !important;
+}
+
+/* 2. AMOLED pure black (base surfaces only; album-art tints stay). */
+:root,
+[data-theme] {
+  --background-base: #000000 !important;
+  --background-highlight: #0d0d0d !important;
+  --background-press: #1a1a1a !important;
+  --background-elevated-base: #0a0a0a !important;
+  --background-elevated-highlight: #161616 !important;
+  --background-elevated-press: #232323 !important;
+  --background-tinted-base: #000000 !important;
+  --background-tinted-highlight: #0d0d0d !important;
+  --background-tinted-press: #1a1a1a !important;
+  --bg-color: #000000 !important;
+}
+
+body {
+  background-color: #000000 !important;
+}
+
+/* Main app shell and the always-on player bar follow the AMOLED theme
+ * even on builds where the variables above are renamed. */
+.Root__top-container,
+.main-view-container,
+.main-nowPlayingBar-container {
+  background-color: #000000 !important;
+}
+
+/* 3. Premium upsell links — href-based, works in every locale. */
+a[href^="https://www.spotify.com/premium"],
+a[href^="/premium"],
+a[href^="spotify:premium"],
+[data-testid="upgrade-cta"],
+[data-testid*="upsell"] {
+  display: none !important;
+}
