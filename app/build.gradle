@@ -5,9 +5,9 @@ plugins {
 android {
     namespace 'com.holiday.yellowspot'
     compileSdk {
-        // GeckoView 157 AAR metadata requires compileSdk 37.1 (minCompileMinorSdk=1).
+        // GeckoView 159 (stable) AAR metadata requires compileSdk 37.2.
         version = release(37) {
-            minorApiLevel = 1
+            minorApiLevel = 2
         }
     }
     buildToolsVersion '37.0.0'
