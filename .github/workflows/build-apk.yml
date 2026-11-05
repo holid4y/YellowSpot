@@ -27,7 +27,7 @@ jobs:
             mv "$SDK/cmdline-tools/cmdline-tools" "$CLT"
           fi
           yes | "$CLT/bin/sdkmanager" --sdk_root="$SDK" --licenses > /dev/null || true
-          "$CLT/bin/sdkmanager" --sdk_root="$SDK" 'platforms;android-37.1' 'build-tools;37.0.0'
+          "$CLT/bin/sdkmanager" --sdk_root="$SDK" 'platforms;android-37.2' 'build-tools;37.0.0'
           echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
       - name: Gradle 9.8.1
