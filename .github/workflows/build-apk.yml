@@ -18,8 +18,17 @@ jobs:
           java-version: '17'
       - name: Android SDK
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager 'platforms;android-37.1' 'build-tools;37.0.0'
+          SDK="$HOME/android-sdk"
+          CLT="$SDK/cmdline-tools/latest"
+          mkdir -p "$SDK/cmdline-tools"
+          if [ ! -x "$CLT/bin/sdkmanager" ]; then
+            curl -sSL -o /tmp/clt.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+            unzip -q /tmp/clt.zip -d "$SDK/cmdline-tools"
+            mv "$SDK/cmdline-tools/cmdline-tools" "$CLT"
+          fi
+          yes | "$CLT/bin/sdkmanager" --sdk_root="$SDK" --licenses > /dev/null || true
+          "$CLT/bin/sdkmanager" --sdk_root="$SDK" 'platforms;android-37.1' 'build-tools;37.0.0'
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
       - name: Gradle 9.8.1
         uses: gradle/actions/setup-gradle@v4
         with:
