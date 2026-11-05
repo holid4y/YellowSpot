@@ -63,7 +63,7 @@ Surveyed the open Spotify-userscript/extension community and adopted the ideas t
 5. Transfer the APK to the POCO X7 Pro and install it, allowing trusted-app installation as prompted.
 6. Launch with internet connected and tap the ◈ shield icon to check the add-on status. Log into Spotify normally.
 
-Alternatively, this repository's **Actions > Build YellowSpot APK** workflow downloads dependencies and publishes `YellowSpot-POCO-X7-Pro-APK` under the workflow run's Artifacts area on every push to main.
+Alternatively, just check this repository's **Actions** tab: the included workflow builds the APK and publishes it to the **Releases** page (`v0.3.0`) and as a workflow artifact (`YellowSpot-POCO-X7-Pro-APK`).
 
 ### HyperOS permissions
 
@@ -77,7 +77,7 @@ In Settings > Apps > YellowSpot: allow notifications; permit background activity
 - `MediaWidget.java`: 4×1 widget transport + metadata.
 - `app/src/main/assets/mobile`: native bundled mobile CSS content script.
 - `app/src/main/assets/adguard`: bundled Spotify ad-guard WebExtension (ad-audio content script, AMOLED + anti-nag cosmetic CSS, header-clean script `uiclean.js`).
-- `.github/workflows/build-apk.yml`: creates downloadable debug APK in CI.
+- `.github/workflows/build-apk.yml`: builds the debug APK in CI and publishes it to GitHub Releases.
 
 ## Verification status
 

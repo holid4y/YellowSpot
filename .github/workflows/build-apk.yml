@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,9 +26,20 @@ jobs:
           gradle-version: '9.8.1'
       - name: Assemble ARM64 debug APK
         run: gradle --no-daemon assembleDebug
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: YellowSpot-POCO-X7-Pro-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+      - name: Publish APK to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v0.3.0"
+          APK="YellowSpot-0.3.0-arm64-debug.apk"
+          cp app/build/outputs/apk/debug/app-debug.apk "$APK"
+          gh release create "$TAG" --title "YellowSpot 0.3.0" \
+            --notes "ARM64 debug APK (versionCode 3, v0.3.0) for the Xiaomi POCO X7 Pro / HyperOS. Signed with the debug keystore. Two-layer ad blocking (uBlock Origin + bundled ad guard), AMOLED pure-black theme, premium-nag removal. See the README for install and HyperOS permission notes." \
+            --latest || true
+          gh release upload "$TAG" "$APK" --clobber
