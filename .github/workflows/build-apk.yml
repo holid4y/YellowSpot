@@ -49,10 +49,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="v0.3.1"
-          APK="YellowSpot-0.3.1-arm64-debug.apk"
+          TAG="v0.3.2"
+          APK="YellowSpot-0.3.2-arm64-debug.apk"
           cp app/build/outputs/apk/debug/app-debug.apk "$APK"
-          gh release create "$TAG" --title "YellowSpot 0.3.1" \
-            --notes "ARM64 debug APK (versionCode 4, v0.3.1) for the Xiaomi POCO X7 Pro / HyperOS. Installs as an in-place update over any build signed with the pinned repo debug keystore (v0.3.1 onward). Two-layer ad blocking (uBlock Origin + bundled ad guard), AMOLED pure-black theme, premium-nag removal. See the README for install and HyperOS permission notes." \
+          gh release create "$TAG" --title "YellowSpot 0.3.2" \
+            --notes "ARM64 debug APK (versionCode 5, v0.3.2) for the Xiaomi POCO X7 Pro / HyperOS. Fixes the startup crash: the engine now ships the GeckoView stable channel (Firefox 159) instead of a nightly build, and adds on-device diagnostics (tap the flag in the top bar to share the log). Same pinned signing key as v0.3.1, so this installs as an in-place update over v0.3.1." \
             --latest || true
           gh release upload "$TAG" "$APK" --clobber

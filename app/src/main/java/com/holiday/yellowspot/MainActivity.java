@@ -66,12 +66,17 @@ public final class MainActivity extends Activity {
         action(bar, "⌂", "Spotify home", () -> app.mainSession.loadUri(YellowSpotApp.SPOTIFY));
         action(bar, "⟳", "Reload", () -> { if (shown != null) shown.reload(); });
         action(bar, "↗", "Open in Firefox (fallback)", this::openFirefox);
+        action(bar, "⚑", "Share diagnostics", this::shareDiagnostics);
 
         browser = new GeckoView(this);
         root.addView(browser, new LinearLayout.LayoutParams(-1, 0, 1));
         showSession(app.mainSession);
         app.attach(this);
+        if (CrashReporter.get() != null) CrashReporter.get().breadcrumb("MainActivity created");
         askNotificationPermission();
+        if (CrashReporter.get() != null && CrashReporter.get().hasCrashOnRecord())
+            Toast.makeText(this, "YellowSpot crashed in a previous run — tap ⚑ to share the diagnostics",
+                    Toast.LENGTH_LONG).show();
     }
 
     private TextView action(LinearLayout bar, String glyph, String tooltip, Runnable onTap) {
@@ -105,6 +110,19 @@ public final class MainActivity extends Activity {
         GeckoSession current = shown;
         if (current != null && current != app.mainSession) { app.closePopup(current); return; }
         if (current != null) current.goBack();
+    }
+
+    private void shareDiagnostics() {
+        String log = CrashReporter.get() != null
+                ? CrashReporter.get().readTail(200 * 1024) : "(no diagnostics)";
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_SUBJECT, "YellowSpot diagnostics");
+        share.putExtra(Intent.EXTRA_TEXT, log);
+        try { startActivity(Intent.createChooser(share, "Share diagnostics")); }
+        catch (RuntimeException e) {
+            Toast.makeText(this, "Cannot share diagnostics", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void openFirefox() {

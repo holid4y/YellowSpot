@@ -58,12 +58,18 @@ public final class YellowSpotApp extends Application implements MediaSession.Del
 
     @Override public void onCreate() {
         super.onCreate();
+        // First: even a crash during Gecko init must leave evidence on disk.
+        CrashReporter diagnostics = CrashReporter.install(this);
+        diagnostics.breadcrumb("Application.onCreate: start");
         // GeckoView uses a single, persistent app profile (cookies/login/localStorage).
         runtime = GeckoRuntime.create(this);
+        diagnostics.breadcrumb("GeckoRuntime created");
         mainSession = createSession();
+        diagnostics.breadcrumb("main session opened");
         installMobileLayout();
         installAdGuard();
         installBlocker();
+        diagnostics.breadcrumb("extension installs scheduled");
         // Spotify remains usable if a network timeout delays the add-on download.
         new Handler(Looper.getMainLooper()).postDelayed(this::loadSpotifyOnce, 10000);
     }
@@ -241,6 +247,7 @@ public final class YellowSpotApp extends Application implements MediaSession.Del
         if (!startedPage) {
             startedPage = true;
             mainSession.loadUri(SPOTIFY);
+            if (CrashReporter.get() != null) CrashReporter.get().breadcrumb("Spotify load requested");
         }
     }
     private void refreshScreen() { if (activity != null) activity.updateBlockerState(); }
