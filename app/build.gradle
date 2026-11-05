@@ -16,15 +16,31 @@ android {
         applicationId 'com.holiday.yellowspot'
         minSdk 26
         targetSdk 35
-        versionCode 3
-        versionName '0.3.0'
+        versionCode 4
+        versionName '0.3.1'
         ndk {
             // Most current Android phones are ARM64. Keeps the APK smaller.
             abiFilters 'arm64-v8a'
         }
     }
 
+    signingConfigs {
+        // Pinned debug keystore so every build (local or CI) is signed with the
+        // SAME key. Android only installs an APK as an update over an existing
+        // install when the signing key matches; the default debug keystore is
+        // randomly generated per machine, which breaks sideload updates.
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled true
             shrinkResources true
